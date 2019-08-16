@@ -26,6 +26,7 @@ func worker() {
 
 	r := pure.New()
 	if cfg.UseCORS {
+    log.Println("Using CORS");
 		r.Use(mw.LoggingAndRecovery(true), cors)
 		r.RegisterAutomaticOPTIONS(cors)
 	} else {
@@ -75,9 +76,10 @@ func listen(r *pure.Mux) {
 }
 
 func cors(next http.HandlerFunc) http.HandlerFunc {
+  log.Println("Managing CORS");
 	return func(w http.ResponseWriter, r *http.Request) {
 		if origin := r.Header.Get("Origin"); origin != "" {
-			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "authorization,content-type")
 		}
