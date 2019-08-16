@@ -1,7 +1,7 @@
 {
     "port": 8888,
     "foreground": true,
-    "debug": false,
+    "debug": true,
     "socket": "",
     "noreg": false,
     "cors": false,
