@@ -27,14 +27,14 @@ func worker() {
 	r := pure.New()
 	if cfg.UseCORS {
     log.Println("Using CORS");
-		r.Use(mw.LoggingAndRecovery(true), cors)
-		r.RegisterAutomaticOPTIONS(cors)
+		//r.Use(mw.LoggingAndRecovery(true), cors)
+		//r.RegisterAutomaticOPTIONS(cors)
 	} else {
-		log.PrintLn("Adding COrS handler");
-		r.Use(mw.LoggingAndRecovery(true), cors)
-    r.RegisterAutomaticOPTIONS(cors)
+		log.Println("Adding COrS handler");
+		//r.Use(mw.LoggingAndRecovery(true), cors)
+    //r.RegisterAutomaticOPTIONS(cors)
 	}
-	//r.Handle("/", cors(http.HandlerFunc(Dashboard));
+	
 	r.Get("/", cors(http.HandlerFunc(Dashboard)))
 	r.Post("/api/items/sync", SyncItems)
 	r.Post("/api/items/backup", BackupItems)
