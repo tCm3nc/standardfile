@@ -95,6 +95,7 @@ func cors(next http.HandlerFunc) http.HandlerFunc {
 			w.Header().Set("Access-Control-Allow-Headers", "authorization,content-type")
 		//}
 		next(w, r)
+		log.Printf("After processing : %v\n", r)
 		//next.ServeHTTP(w, r)
 	}
 }
