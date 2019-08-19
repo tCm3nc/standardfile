@@ -46,7 +46,8 @@ func worker() {
 	r.Post("/api/auth/update", UpdateUser)
 	r.Post("/api/auth/change_pw", ChangePassword)
 	r.Post("/api/auth/sign_in", Login)
-	r.Post("/api/auth/sign_in.json", Login)
+	//r.Post("/api/auth/sign_in.json", Login)
+	r.Post("/api/auth/sign_in.json", cors(http.HandlerFunc(Login)));
 	//r.Get("/api/auth/params", GetParams)
 	r.Get("/api/auth/params", cors(http.HandlerFunc(GetParams)));
 
