@@ -36,17 +36,17 @@ func worker() {
 	r.RegisterAutomaticOPTIONS(cors)
 
 	r.Get("/", cors(Dashboard))
-	r.Post("/api/items/sync", SyncItems)
-	r.Post("/api/items/backup", BackupItems)
+	r.Post("/api/items/sync", cors(SyncItems))
+	r.Post("/api/items/backup", cors(BackupItems))
 	// r.DELETE("/api/items", DeleteItems)
 	if !cfg.NoReg {
-		r.Post("/api/auth", Registration)
+		r.Post("/api/auth", cors(Registration))
 	}
-	r.Patch("/api/auth", ChangePassword)
-	r.Post("/api/auth/update", UpdateUser)
-	r.Post("/api/auth/change_pw", ChangePassword)
-	r.Post("/api/auth/sign_in", Login)
-	r.Post("/api/auth/sign_in.json", Login)
+	r.Patch("/api/auth", cors(ChangePassword))
+	r.Post("/api/auth/update", cors(UpdateUser))
+	r.Post("/api/auth/change_pw", cors(ChangePassword))
+	r.Post("/api/auth/sign_in", cors(Login))
+	r.Post("/api/auth/sign_in.json", cors(Login))
 	//r.Get("/api/auth/params", GetParams)
 	r.Get("/api/auth/params", cors(GetParams))
 
