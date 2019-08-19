@@ -26,13 +26,13 @@ func worker() {
 
 	r := pure.New()
 	if cfg.UseCORS {
-		r.Use(mw.LoggingAndRecovery(true), cors)
-		r.RegisterAutomaticOPTIONS(cors)
+		//r.Use(mw.LoggingAndRecovery(true), cors)
+		//r.RegisterAutomaticOPTIONS(cors)
 	} else {
 		r.Use(mw.LoggingAndRecovery(true))
 	}
 
-	r.Get("/", Dashboard)
+	r.Get("/", cors(Dashboard))
 	r.Post("/api/items/sync", SyncItems)
 	r.Post("/api/items/backup", BackupItems)
 	// r.DELETE("/api/items", DeleteItems)
@@ -44,7 +44,8 @@ func worker() {
 	r.Post("/api/auth/change_pw", ChangePassword)
 	r.Post("/api/auth/sign_in", Login)
 	r.Post("/api/auth/sign_in.json", Login)
-	r.Get("/api/auth/params", GetParams)
+	//r.Get("/api/auth/params", GetParams)
+	r.Get("/api/auth/params", cors(GetParams))
 
 	defer removeSock()
 	go listen(r)
@@ -74,14 +75,27 @@ func listen(r *pure.Mux) {
 	}
 }
 
+// func cors(next http.HandlerFunc) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		if origin := r.Header.Get("Origin"); origin != "" {
+// 			w.Header().Set("Access-Control-Allow-Origin", origin)
+// 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
+// 			w.Header().Set("Access-Control-Allow-Headers", "authorization,content-type")
+// 		}
+// 		next(w, r)
+// 	}
+// }
+
 func cors(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Request received : %v\n", r)
 		if origin := r.Header.Get("Origin"); origin != "" {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "authorization,content-type")
 		}
 		next(w, r)
+		//next.ServeHTTP(w, r)
 	}
 }
 
