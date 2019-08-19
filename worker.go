@@ -32,6 +32,9 @@ func worker() {
 		r.Use(mw.LoggingAndRecovery(true))
 	}
 
+	r.Use(mw.LoggingAndRecovery(true), cors)
+	r.RegisterAutomaticOPTIONS(cors)
+
 	r.Get("/", cors(Dashboard))
 	r.Post("/api/items/sync", SyncItems)
 	r.Post("/api/items/backup", BackupItems)
