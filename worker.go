@@ -33,8 +33,8 @@ func worker() {
 		r.Use(mw.LoggingAndRecovery(true), cors)
     r.RegisterAutomaticOPTIONS(cors)
 	}
-
-	r.Get("/", Dashboard)
+	//r.Handle("/", cors(http.HandlerFunc(Dashboard));
+	r.Get("/", cors(http.HandlerFunc(Dashboard)))
 	r.Post("/api/items/sync", SyncItems)
 	r.Post("/api/items/backup", BackupItems)
 	// r.DELETE("/api/items", DeleteItems)
@@ -76,16 +76,17 @@ func listen(r *pure.Mux) {
 	}
 }
 
-func cors(next http.HandlerFunc) http.HandlerFunc {
-  log.Println("Managing CORS");
-	return func(w http.ResponseWriter, r *http.Request) {
+func cors(next http.Handler) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Got a request : %v\n", r);
 		if origin := r.Header.Get("Origin"); origin != "" {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "authorization,content-type")
 		}
-		next(w, r)
-	}
+		//next(w, r)
+		next.ServeHTTP(w, r)
+	})
 }
 
 func removeSock() {
