@@ -17,7 +17,7 @@ import (
 
 func worker() {
 	db.Init(cfg.DB)
-	log.Println("Started StandardFile Server", Version)
+	log.Println("Started StandardFile Server - mod", Version)
 	log.Println("Loaded config:", loadedConfig)
 
 	if cfg.Debug {
@@ -30,6 +30,7 @@ func worker() {
 		r.Use(mw.LoggingAndRecovery(true), cors)
 		r.RegisterAutomaticOPTIONS(cors)
 	} else {
+		log.PrintLn("Adding COrS handler");
 		r.Use(mw.LoggingAndRecovery(true), cors)
     r.RegisterAutomaticOPTIONS(cors)
 	}
@@ -46,7 +47,8 @@ func worker() {
 	r.Post("/api/auth/change_pw", ChangePassword)
 	r.Post("/api/auth/sign_in", Login)
 	r.Post("/api/auth/sign_in.json", Login)
-	r.Get("/api/auth/params", GetParams)
+	//r.Get("/api/auth/params", GetParams)
+	r.Get("/api/auth/params", cors(http.HandlerFunc(GetParams)));
 
 	defer removeSock()
 	go listen(r)
