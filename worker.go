@@ -31,6 +31,7 @@ func worker() {
 		r.RegisterAutomaticOPTIONS(cors)
 	} else {
 		r.Use(mw.LoggingAndRecovery(true))
+    r.RegisterAutomaticOPTIONS(cors)
 	}
 
 	r.Get("/", Dashboard)
