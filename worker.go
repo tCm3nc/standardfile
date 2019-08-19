@@ -30,7 +30,6 @@ func worker() {
 		//r.Use(mw.LoggingAndRecovery(true), cors)
 		//r.RegisterAutomaticOPTIONS(cors)
 	} else {
-		log.Println("Adding COrS handler");
 		r.Use(mw.LoggingAndRecovery(true))
     //r.RegisterAutomaticOPTIONS(cors)
 	}
